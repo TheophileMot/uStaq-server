@@ -62,3 +62,4 @@ eslintrc.js
 .next
 
 .DS_Store
+ga.json

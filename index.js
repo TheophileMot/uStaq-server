@@ -1,14 +1,15 @@
 // basic Express setup
 "use strict";
 
+// const ENV           = process.env.ENV;
 const PORT          = 8080;
 const express       = require("express");
 const bodyParser    = require("body-parser");
 const app           = express();
 
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
-
 
 // Mongo DB setup
 const MongoClient = require("mongodb").MongoClient;
