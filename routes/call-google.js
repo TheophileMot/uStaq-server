@@ -7,10 +7,7 @@ const language = require('@google-cloud/language');
 // Creates a Google Cloud Language
 const nlpClient = new language.LanguageServiceClient();
 
-api.getWikiPage("cats")
-  .then(function(text) { 
-    return text
-  })
+api.getWikiPage("Stack Overflow")
   .then(function(text) {
     let document = {
       content: text,
