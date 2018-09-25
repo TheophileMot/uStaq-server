@@ -1,18 +1,16 @@
 // basic Express setup
 "use strict";
 
-// const ENV           = process.env.ENV;
-const PORT          = 8080;
-const express       = require("express");
-const bodyParser    = require("body-parser");
-const app           = express();
+import express, { static } from "express";
+import { urlencoded } from "body-parser";
+const PORT = 8080;
+const app = express();
 
-
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static("public"));
+app.use(urlencoded({ extended: true }));
+app.use(static("public"));
 
 // Mongo DB setup
-const MongoClient = require("mongodb").MongoClient;
+import { MongoClient } from "mongodb";
 const MONGO_URI = "mongodb://127.0.0.1:27017/USTAQ_DB"
 
 let db;
