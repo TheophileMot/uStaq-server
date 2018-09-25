@@ -27,7 +27,7 @@ module.exports = function makeApiHelpers() {
           let pageId = Object.keys(result.query.pages)[0]
           let usableText = strip(JSON.stringify(result.query.pages[pageId].extract))
           resolve(usableText)
-          })
+        })
       })
     }
   }

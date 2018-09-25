@@ -17,8 +17,8 @@ api.getWikiPage("Stack Overflow")
       .analyzeSyntax({document: document})
       .then((results) => {
         const syntax = results[0];
-        console.log(JSON.stringify(results))
-
+        console.log(syntax)
+        
         // console.log('Tokens:');
         // syntax.tokens.forEach((part, i)  => {
         //   console.log(`${i}: ${part.partOfSpeech.tag} "${part.text.content}"`);
