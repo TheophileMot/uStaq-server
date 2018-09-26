@@ -4,35 +4,36 @@ const api = require('./call-wiki.js')();
 // Imports the Google Cloud client library
 const language = require('@google-cloud/language');
 
-// Creates a Google Cloud Language
+// Creates a Google Cloud Language Client instance
 const nlpClient = new language.LanguageServiceClient();
 
-// api.getWikiPage("Stack Overflow")
-//   .then(function(text) {
-//     let document = {
-//       content: text,
-//       type: 'PLAIN_TEXT',
-//     }
-//     nlpClient
-//       .analyzeSyntax({document: document})
-//       .then((results) => {
-//         const syntax = results[0];
-//         console.log(syntax)
+// makes call to client
+api.getWikiPage("Stack Overflow")
+  .then(function(text) {
+    let document = {
+      content: text,
+      type: 'PLAIN_TEXT',
+    }
+    nlpClient
+      .analyzeSyntax({document: document})
+      .then((results) => {
+        const syntax = results[0];
+        console.log(syntax)
         
-//         // console.log('Tokens:');
-//         // syntax.tokens.forEach((part, i)  => {
-//         //   console.log(`${i}: ${part.partOfSpeech.tag} "${part.text.content}"`);
-//         //   console.log(`Refs: ${part.dependencyEdge.label}, ${part.dependencyEdge.headTokenIndex}`)
-//         //   console.log(" ")
-//         // });
-//       })
-//       .catch((err) => {
-//       console.error('ERROR:', err);
-//     });
-//   })
+        // console.log('Tokens:');
+        // syntax.tokens.forEach((part, i)  => {
+        //   console.log(`${i}: ${part.partOfSpeech.tag} "${part.text.content}"`);
+        //   console.log(`Refs: ${part.dependencyEdge.label}, ${part.dependencyEdge.headTokenIndex}`)
+        //   console.log(" ")
+        // });
+      })
+      .catch((err) => {
+      console.error('ERROR:', err);
+    });
+  })
 
 
-  // THIS IS FOR GETTING SMALL SECTIONS OF TEXT
+ function manualGetSyntaxBreakdown () {
   let document = {
     content: `The common hippopotamus (Hippopotamus amphibius), or hippo, is a large, mostly herbivorous, semiaquatic mammal native to sub-Saharan Africa, and one of only two extant species in the family Hippopotamidae, the other being the pygmy hippopotamus (Choeropsis liberiensis or Hexaprotodon liberiensis). The name comes from the ancient Greek for "river horse" (ἱπποπόταμος). After the elephant and rhinoceros, the common hippopotamus is the third-largest type of land mammal and the heaviest extant artiodactyl. Despite their physical resemblance to pigs and other terrestrial even-toed ungulates, the closest living relatives of the Hippopotamidae are cetaceans (whales, dolphins, porpoises, etc.) from which they diverged about 55 million years ago.
     Common hippos are recognisable by their barrel-shaped torsos, wide-opening mouths revealing large canine tusks, nearly hairless bodies, columnar legs and large size; adults average 1,500 kg (3,310 lb) and 1,300 kg (2,870 lb) for males and females respectively. Despite its stocky shape and short legs, it is capable of running 30 km/h (19 mph) over short distances.
@@ -44,14 +45,8 @@ const nlpClient = new language.LanguageServiceClient();
     .then((results) => {
       const syntax = results[0];
       console.log(JSON.stringify(syntax))
-      
-      // console.log('Tokens:');
-      // syntax.tokens.forEach((part, i)  => {
-      //   console.log(`${i}: ${part.partOfSpeech.tag} "${part.text.content}"`);
-      //   console.log(`Refs: ${part.dependencyEdge.label}, ${part.dependencyEdge.headTokenIndex}`)
-      //   console.log(" ")
-      // });
     })
     .catch((err) => {
     console.error('ERROR:', err);
-  });
+  })
+}
