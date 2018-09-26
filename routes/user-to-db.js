@@ -3,8 +3,6 @@
 const express = require('express')
 const router = express.Router()
 
-let user = {first_name: "Dia", last_name: "Apostolakis"}
-
 // mode for taking from client and passing to db
 module.exports = function(dbMethods) {
 
@@ -29,5 +27,6 @@ module.exports = function(dbMethods) {
       res.status(500).send(err)
     })
   })
+  
   return router
 }

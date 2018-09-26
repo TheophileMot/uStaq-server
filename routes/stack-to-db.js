@@ -3,7 +3,6 @@
 const express = require('express')
 const router = express.Router()
 
-// mode for taking from client and passing to db
 module.exports = function(dbMethods) {
 
   router.get('/', function(req,res) {
@@ -18,7 +17,7 @@ module.exports = function(dbMethods) {
   })
   
   router.get('/:id', function(req, res) {
-    let stackId; // TODO - will come from req
+    let stackId;
     dbMethods.getStackById(stackId)
     .then(stack => {
       res.json(stack)
