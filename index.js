@@ -2,12 +2,12 @@
 'use strict';
 
 const PORT = 8080;
-const express = require('express')
-const bodyParser = require('body-parser')
-const app = express();
+// const express = require('express')
+// const bodyParser = require('body-parser')
+const app = require('./app')
 
 app.use(bodyParser.urlencoded({ extended: true }))
-app.use(express.static('public'))
+// app.use(express.static('public'))
 
 // Mongo DB setup
 const MongoClient = require('mongodb').MongoClient

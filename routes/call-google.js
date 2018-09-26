@@ -1,5 +1,6 @@
 process.env.GOOGLE_APPLICATION_CREDENTIALS = './ga.json'
 const api = require('./call-wiki.js')();
+const wTextRank = require('../utilities/weighted-text-rank')
 
 // Imports the Google Cloud client library
 const language = require('@google-cloud/language');
@@ -18,14 +19,13 @@ api.getWikiPage("Stack Overflow")
       .analyzeSyntax({document: document})
       .then((results) => {
         const syntax = results[0];
-        console.log(syntax)
         
-        // console.log('Tokens:');
-        // syntax.tokens.forEach((part, i)  => {
-        //   console.log(`${i}: ${part.partOfSpeech.tag} "${part.text.content}"`);
-        //   console.log(`Refs: ${part.dependencyEdge.label}, ${part.dependencyEdge.headTokenIndex}`)
-        //   console.log(" ")
-        // });
+        const WTR = new wTextRank(syntax)
+        
+        let rankedSentences = WTR.rankSentences();
+        let bestSentences = rankedSentences.slice(0, 5);
+        console.log(bestSentences)
+        // console.log(bestSentences.map(s => [+s.score.toFixed(2), s.text.content, Array.from(s.keyTokens)]));
       })
       .catch((err) => {
       console.error('ERROR:', err);
