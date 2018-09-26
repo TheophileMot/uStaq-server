@@ -8,7 +8,7 @@ module.exports = function(dbMethods) {
 
   router.get('/', function(req,res) {
     let userId; // TODO - will come from req
-    dbMethods.getStacks(userId)
+    dbMethods.getAllStacks(userId)
     .then(stacks => {
       res.json(stacks)
     })
@@ -30,7 +30,7 @@ module.exports = function(dbMethods) {
 
   router.post('/', function(req,res) {
     let newStack; // TODO - will come from req
-    dbMethods.saveUser(newStack)
+    dbMethods.saveStack(newStack)
     .then(stack => {
       res.status(201).send(stack)
     })

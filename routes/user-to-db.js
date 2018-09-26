@@ -23,7 +23,7 @@ module.exports = function(dbMethods) {
     let newUser;// TODO -  will come from req
     dbMethods.saveUser(newUser)
     .then(user => {
-      res.status(200).send(user)
+      res.status(201).send()
     })
     .catch(err => {
       res.status(500).send(err)

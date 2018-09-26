@@ -1,7 +1,7 @@
 [
   {
     title: "Sea Otters",
-    owner: { "_id" : ObjectId("5baa90da1c2dd12bca3b47bb")},
+    owner: { "_id" : 3},
     tags: [],
     cards: [ 
       {
