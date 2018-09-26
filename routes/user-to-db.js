@@ -3,25 +3,31 @@
 const express = require('express')
 const router = express.Router()
 
+let user = {first_name: "Dia", last_name: "Apostolakis"}
+
 // mode for taking from client and passing to db
 module.exports = function(dbMethods) {
 
-    router.get('/', function(req,res) {
-    // # TODO
-    console.log('WE GOT HERE')
-    let userId = '3'
+  router.get('/', function(req,res) {
+    let userId; // TODO - req.body.userId (or similar)
     dbMethods.getUser(userId)
-    // - pass to PROMISE from dbMethods
-    //   - should return collection
+    .then(user => {
+      res.json(user);
+    })
+    .catch(err => {
+      res.status(500).send(err)
+    })
   })
 
   router.post('/', function(req,res) {
-
-    // # TODO
-    // - filter data from client
-    // - pass to PROMISE from dbMethods
-    //   - should add filtered data to db
-  
+    let newUser;// TODO -  will come from req
+    dbMethods.saveUser(newUser)
+    .then(user => {
+      res.status(200).send(user)
+    })
+    .catch(err => {
+      res.status(500).send(err)
+    })
   })
   return router
 }
