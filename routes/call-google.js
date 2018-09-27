@@ -29,7 +29,7 @@ module.exports = function makeGoogleHelpers() {
 
               let rankedSentences = WTR.rankSentences();
               let bestSentences = rankedSentences.slice(0, 5);
-              console.log(bestSentences)
+              console.log(bestSentences[0].tokens)
               // console.log(bestSentences.map(s => [+s.score.toFixed(2), s.text.content, Array.from(s.keyTokens)]));
             })
             .catch((err) => {

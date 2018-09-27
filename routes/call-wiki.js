@@ -5,6 +5,7 @@ const regex1 = /\\\\n/g
 const regex2 = /\\n/g
 const regex3 = /\\s/g
 const regex4 = /\\"/g
+const regex5 = /\\'/g
 
 module.exports = function makeWikiHelper() {
   return {
@@ -33,9 +34,8 @@ module.exports = function makeWikiHelper() {
           let pageId = Object.keys(result.query.pages)[0]
           let text = strip(JSON.stringify(result.query.pages[pageId].extract))
           let usableText = text.replace(regex1, ' ')
-            .replace(regex2, ' ')
-            .replace(regex3, "'s")
-            .replace(regex4, '"')
+            .replace(regex2, ' ').replace(regex3, "'s")
+            .replace(regex4, '"').replace(regex5, "'")
           resolve(usableText)
         })
       })
