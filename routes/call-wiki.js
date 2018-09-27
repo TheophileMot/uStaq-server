@@ -1,4 +1,4 @@
-const request = require("request");
+const request = require("request")
 const strip = require("strip")
 
 const regex1 = /\\\\n/g
@@ -24,7 +24,7 @@ module.exports = function makeWikiHelper() {
           }
         };
       return new Promise(function(resolve, reject) {
-        let wikiPage = request(options, function (error, response, body) {
+        request(options, function (error, response, body) {
           if (error) {
             reject(error)
           }

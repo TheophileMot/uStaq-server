@@ -12,29 +12,46 @@ const nlpClient = new language.LanguageServiceClient();
 module.exports = function makeGoogleHelpers() {
   return {
 
+    passTextToGoogle: text => {
+      let document = {
+        content: text,
+        type: 'PLAIN_TEXT',
+      }
+      return nlpClient
+        .analyzeSyntax({ document: document })
+        .then(results => {
+          const syntax = results[0];
+          const WTR = new wTextRank(syntax)
+          let rankedSentences = WTR.rankSentences();
+          let bestSentences = rankedSentences.slice(0, 5);
+
+          // TODO: pass through parent determiner utility
+          return bestSentences[0].tokens
+        })
+        .catch((err) => {
+          console.error('ERROR:', err);
+        })
+    },
+
     // makes call to Google client
-    passWikiToGoogle: (query) => {
-      api.getWikiPage(query)
-        .then(function (text) {
-          let document = {
-            content: text,
-            type: 'PLAIN_TEXT',
-          }
-          nlpClient
-            .analyzeSyntax({ document: document })
-            .then((results) => {
-              const syntax = results[0];
+    passWikiToGoogle: query => {
+      return api.getWikiPage(query)
+        .then(text => Promise.resolve({
+          content: text,
+          type: 'PLAIN_TEXT',
+        }))
+        .then(document => nlpClient.analyzeSyntax({ document: document }))
+        .then(results => {
+          const syntax = results[0]
+          const WTR = new wTextRank(syntax)
+          let rankedSentences = WTR.rankSentences()
+          let bestSentences = rankedSentences.slice(0, 5)
 
-              const WTR = new wTextRank(syntax)
-
-              let rankedSentences = WTR.rankSentences();
-              let bestSentences = rankedSentences.slice(0, 5);
-              console.log(bestSentences[0].tokens)
-              // console.log(bestSentences.map(s => [+s.score.toFixed(2), s.text.content, Array.from(s.keyTokens)]));
-            })
-            .catch((err) => {
-              console.error('ERROR:', err);
-            });
+          // TODO: pass through parent determiner utility
+          return bestSentences[0].tokens
+        })
+        .catch((err) => {
+          console.error('ERROR:', err);
         })
     }
   }
