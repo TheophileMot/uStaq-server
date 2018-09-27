@@ -2,12 +2,12 @@
 'use strict';
 
 const PORT = 8080;
-// const express = require('express')
-// const bodyParser = require('body-parser')
-const app = require('./app')
+const express = require('express')
+const bodyParser = require('body-parser')
+const app = express()
 
 app.use(bodyParser.urlencoded({ extended: true }))
-// app.use(express.static('public'))
+app.use(express.static('public'))
 
 // Mongo DB setup
 const MongoClient = require('mongodb').MongoClient
@@ -26,10 +26,15 @@ MongoClient.connect(MONGO_URI, function(err, client) {
   const stackRouter = require('./routes/stack-to-db')(dbMethods)
   const userRouter  = require('./routes/user-to-db')(dbMethods)
 
-  // setting URI path of data routers
+  // setting URI path of data routers that require Mongo
   app.use('/stacks', stackRouter)
   app.use('/users', userRouter)
+  
 })
+
+// setting non-db routers
+const protoStackRouter = require('./routes/proto-stack')()
+app.use('/proto', protoStackRouter)
 
 app.listen(PORT, () => {
   console.log('Example app listening on port ' + PORT)

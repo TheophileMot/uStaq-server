@@ -1,8 +1,12 @@
 const request = require("request");
 const strip = require("strip")
 
+const regex1 = /\\\\n/g
+const regex2 = /\\n/g
+const regex3 = /\\s/g
+const regex4 = /\\"/g
 
-module.exports = function makeApiHelpers() {
+module.exports = function makeWikiHelper() {
   return {
     
     // returns text of full Wikipedia page -- plain text
@@ -22,10 +26,16 @@ module.exports = function makeApiHelpers() {
         let wikiPage = request(options, function (error, response, body) {
           if (error) {
             reject(error)
-          } 
+          }
+
+          //parsing, taking out html elements, extraneous characters with regex
           let result = JSON.parse(body)
           let pageId = Object.keys(result.query.pages)[0]
-          let usableText = strip(JSON.stringify(result.query.pages[pageId].extract))
+          let text = strip(JSON.stringify(result.query.pages[pageId].extract))
+          let usableText = text.replace(regex1, ' ')
+            .replace(regex2, ' ')
+            .replace(regex3, "'s")
+            .replace(regex4, '"')
           resolve(usableText)
         })
       })

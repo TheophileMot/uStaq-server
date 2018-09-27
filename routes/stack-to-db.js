@@ -7,7 +7,7 @@ module.exports = function(dbMethods) {
 
   router.get('/', function(req,res) {
     let userId; // TODO - will come from req
-    dbMethods.getAllStacks(userId)
+    dbMethods.getAllStacks()
     .then(stacks => {
       res.json(stacks)
     })
