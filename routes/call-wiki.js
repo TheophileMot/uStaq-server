@@ -32,7 +32,10 @@ module.exports = function makeWikiHelper() {
           //parsing, taking out html elements, extraneous characters with regex
           let result = JSON.parse(body)
           let pageId = Object.keys(result.query.pages)[0]
-          let text = strip(JSON.stringify(result.query.pages[pageId].extract))
+          let preParsed = result.query.pages[pageId].extract
+          console.log(preParsed)
+          let spacedText = preParsed.replace(/(<.+?>)/g, '$1 ')
+          let text = strip(JSON.stringify(spacedText))
           let usableText = text.replace(regex1, ' ')
             .replace(regex2, ' ').replace(regex3, "'s")
             .replace(regex4, '"').replace(regex5, "'")
