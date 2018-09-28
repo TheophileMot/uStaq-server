@@ -1,6 +1,5 @@
 process.env.GOOGLE_APPLICATION_CREDENTIALS = './ga.json'
 const api = require('./call-wiki.js')();
-const wTextRank = require('../utilities/weighted-text-rank')
 
 // Imports the Google Cloud client library
 const language = require('@google-cloud/language');
@@ -19,15 +18,7 @@ module.exports = function makeGoogleHelpers() {
       }
       return nlpClient
         .analyzeSyntax({ document: document })
-        .then(results => {
-          const syntax = results[0];
-          const WTR = new wTextRank(syntax)
-          let rankedSentences = WTR.rankSentences();
-          let bestSentences = rankedSentences.slice(0, 5);
-
-          // TODO: pass through parent determiner utility
-          return bestSentences[0].tokens
-        })
+        .then(results => results[0])
         .catch((err) => {
           console.error('ERROR:', err);
         })
@@ -40,15 +31,7 @@ module.exports = function makeGoogleHelpers() {
           type: 'PLAIN_TEXT',
         }))
         .then(document => nlpClient.analyzeSyntax({ document: document }))
-        .then(results => {
-          const syntax = results[0]
-          const WTR = new wTextRank(syntax)
-          let rankedSentences = WTR.rankSentences()
-          let bestSentences = rankedSentences.slice(0, 5)
-
-          // TODO: pass through parent determiner utility
-          return bestSentences[0].tokens
-        })
+        .then(results => results[0])
         .catch((err) => {
           console.error('ERROR:', err);
         })

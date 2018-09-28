@@ -3,6 +3,7 @@
 const express = require('express')
 const router = express.Router()
 const api = require('./call-google.js')();
+const wTextRank = require('../utilities/weighted-text-rank')
 
 module.exports = function () {
 
@@ -13,6 +14,11 @@ module.exports = function () {
     console.log('This is query:', query)
     if (type === 'wiki') {
       api.passWikiToGoogle(query)
+        .then(syntax => {
+          const WTR = new wTextRank(syntax)
+          return WTR.rankSentences();
+        })
+        // TODO: ADD SECOND UTILITY
         .then(protoStack => {
           res.json(protoStack)
         })
@@ -21,6 +27,10 @@ module.exports = function () {
         })
     } else if (type === 'text') {
       api.passTextToGoogle(text)
+        .then(syntax => {
+          const WTR = new wTextRank(syntax)
+          return WTR.rankSentences();
+        })
         .then(protoStack => {
           res.json(protoStack)
         })
