@@ -5,7 +5,7 @@
     tags: [],
     cards: [ 
       {
-        "chef's reccomendation": 0,
+        "chefsReccomendation": 0,
         setence: [ 
           {
             token: 'Sea',
