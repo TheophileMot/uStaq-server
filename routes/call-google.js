@@ -33,7 +33,6 @@ module.exports = function makeGoogleHelpers() {
         })
     },
 
-    // makes call to Google client
     passWikiToGoogle: query => {
       return api.getWikiPage(query)
         .then(text => Promise.resolve({
