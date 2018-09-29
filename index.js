@@ -6,7 +6,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
 
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json({limit: '50mb', extended: true}))
 app.use(express.static('public'))
 
 // Mongo DB setup
@@ -31,6 +31,12 @@ MongoClient.connect(MONGO_URI, function(err, client) {
   app.use('/users', userRouter)
   
 })
+
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
 // setting non-db routers
 const protoStackRouter = require('./routes/proto-stack')()

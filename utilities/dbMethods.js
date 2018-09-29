@@ -22,16 +22,19 @@ module.exports = function makeDbMethods(db) {
     },
 
     // STACK METHODS
-    saveStack: async (newStack) => {
+    saveStack: async (newStack, userId) => {
       try {
-        await db.collection('stacks').insertOne(newStack)
+        await db.collection('stacks').insertOne(newStack, async function(err, docs) {
+          let docId = docs.insertedId
+          await db.collection('users').update({ _id: userId }, { $push: { owned: docId }})
+        })
       } catch (error) {
         return error
       }
     },
     getStackById: async (stackId) => {
       try {
-        let stack = await db.collection('users').find({_id: stackId}).toArray()
+        let stack = await db.collection('stacks').find({_id: stackId}).toArray()
         return stack
       } catch (error) {
         return error
@@ -39,8 +42,7 @@ module.exports = function makeDbMethods(db) {
     },
     getAllStacks: async (userId) => {
       try {
-        let stacks = await db.collection('users').find({ owner: { _id: userId } }).toArray()
-        // let stacks = await db.collection('users').find().toArray()        
+        let stacks = await db.collection('stacks').find({ owner: { _id: userId } }).toArray()
         return stacks
       } catch (error) {
         return error
