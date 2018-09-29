@@ -3,10 +3,19 @@
 const express = require('express')
 const router = express.Router()
 const api = require('./call-google.js')()
-const wTextRank = require('../utilities/weighted-text-rank')
+const wTextRank = require('weightedtextrank')
 const HoverTree = require('../utilities/buildHoverTree')()
 
 module.exports = function () {
+
+  function tokenWeightFunction(i, sentence) {
+    const AVOID_WORDS = ['this', 'these', 'those']
+    if (AVOID_WORDS.includes(sentence.tokens[i].text.content.toLowerCase())) {
+      return 0.1;
+    } else {
+      return 1;
+    }
+  }
 
   router.get('/', function(req, res) {
     res.send({routerSays: "nawho"})
@@ -26,7 +35,7 @@ module.exports = function () {
       if (type === 'wiki') {
         api.passWikiToGoogle(query)
         .then(syntax => {
-          const WTR = new wTextRank(syntax)
+          const WTR = new wTextRank(syntax, tokenWeightFunction)
           return WTR.rankSentences()
         })
         .then(rankedSentences => {
@@ -35,7 +44,7 @@ module.exports = function () {
           })
           // return rankedSentences.sort((s, t) => t.score - s.score)
           rankedSentences.sort((s, t) => t.score - s.score)
-            return rankedSentences.map(s => [s.text.content, s.hoverRoots.map(r => s.tokens[r].text.content)])
+            return rankedSentences//.map(s => [s.text.content, s.hoverRoots.map(r => s.tokens[r].text.content)])
           })
           .then(protoStack => {
             res.json(protoStack)

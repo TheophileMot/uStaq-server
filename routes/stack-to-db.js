@@ -29,8 +29,12 @@ module.exports = function (dbMethods) {
   })
 
   router.post('/', function (req, res) {
-    let newStack = req.body.newStack 
     let userId = req.body.userId
+    let newStack = { 
+      owner: { _id: userId},
+      sentences: req.body.newStack
+    }
+    console.log(newStack)
     dbMethods.saveStack(newStack, userId)
       .then(stack => {
         res.status(201).send(stack)
