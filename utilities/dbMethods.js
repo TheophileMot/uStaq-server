@@ -48,13 +48,20 @@ module.exports = function makeDbMethods(db) {
         return error
       }
     },
-    getAllStacks: async (userId) => {
+    getAllStacks: async () => {
       try {
         let stacks = await db.collection('stacks').find().toArray()
         return stacks
       } catch (error) {
         return error
       }
+    },
+    deleteStackById: async (stackId) => {
+      try {
+        await db.collection('stacks').deleteOne({_id: stackId})
+      } catch (error) {
+        return error
+      } 
     },
   }
 }
