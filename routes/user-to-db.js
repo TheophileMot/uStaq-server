@@ -18,7 +18,7 @@ module.exports = function(dbMethods) {
   })
 
   router.post('/', function(req,res) {
-    let newUser;// TODO -  will come from req
+    let newUser = req.body
     dbMethods.saveUser(newUser)
     .then(user => {
       res.status(201).send()
