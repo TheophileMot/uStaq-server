@@ -37,10 +37,10 @@ module.exports = function (dbMethods) {
           rankedSentences.sort((s, t) => t.score - s.score)
           return rankedSentences
         })
-        .then(protoStack => {
+        .then(sentences => {
           let stack = {
             owner: { _id: userId},
-            sentences: [protoStack]
+            sentences
           }
           dbMethods.saveStack(stack, userId)
         })

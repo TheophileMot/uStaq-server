@@ -40,9 +40,17 @@ module.exports = function makeDbMethods(db) {
         return error
       }
     },
-    getAllStacks: async (userId) => {
+    getUserStacks: async (userId) => {
       try {
         let stacks = await db.collection('stacks').find({ owner: { _id: userId } }).toArray()
+        return stacks
+      } catch (error) {
+        return error
+      }
+    },
+    getAllStacks: async (userId) => {
+      try {
+        let stacks = await db.collection('stacks').find().toArray()
         return stacks
       } catch (error) {
         return error
