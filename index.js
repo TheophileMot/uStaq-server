@@ -25,11 +25,12 @@ MongoClient.connect(MONGO_URI, function(err, client) {
   // passing methods to data routers
   const stackRouter = require('./routes/stack-to-db')(dbMethods)
   const userRouter  = require('./routes/user-to-db')(dbMethods)
-
+  const protoStackRouter = require('./routes/proto-stack')(dbMethods)
+ 
   // setting URI path of data routers that require Mongo
   app.use('/stacks', stackRouter)
   app.use('/users', userRouter)
-  
+  app.use('/proto', protoStackRouter)
 })
 
 app.use(function(req, res, next) {
@@ -37,10 +38,6 @@ app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
-
-// setting non-db routers
-const protoStackRouter = require('./routes/proto-stack')()
-app.use('/proto', protoStackRouter)
 
 app.listen(PORT, () => {
   console.log('Example app listening on port ' + PORT)

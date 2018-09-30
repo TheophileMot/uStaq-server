@@ -7,10 +7,9 @@ const router = express.Router()
 module.exports = function (dbMethods) {
 
   router.get('/', function (req, res) {
-    let userId; // TODO - change to come from REQ
-    dbMethods.getAllStacks(userId)
-      .then(stacks => {
-        res.json(stacks)
+    dbMethods.getAllStacks()
+      .then(stack => {
+        res.json(stack)
       })
       .catch(err => {
         res.status(500).send(err)
@@ -28,13 +27,25 @@ module.exports = function (dbMethods) {
       })
   })
 
+  router.get('/user/:id', function (req, res) {
+    let userId = req.params.id
+    dbMethods.getUserStacks(userId)
+      .then(stacks => {
+        res.json(stacks)
+      })
+      .catch(err => {
+        res.status(500).send(err)
+      })
+  })
+
   router.post('/', function (req, res) {
+    console.log("ASDF REQ.BODY.NEWSTACK:", req.body.newStack)
     let userId = req.body.userId
     let newStack = { 
       owner: { _id: userId},
       sentences: req.body.newStack
     }
-    console.log(newStack)
+    console.log("NEWSTACK BEFORE SAVE", newStack)
     dbMethods.saveStack(newStack, userId)
       .then(stack => {
         res.status(201).send(stack)
