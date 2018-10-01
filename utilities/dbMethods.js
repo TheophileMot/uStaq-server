@@ -64,7 +64,7 @@ module.exports = function makeDbMethods(db) {
         await db.collection('stacks').deleteOne({_id: dbStackId})
       } catch (error) {
         return error
-      } 
+      }
     },
   }
 }
