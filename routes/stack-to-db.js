@@ -18,6 +18,7 @@ module.exports = function (dbMethods) {
 
   router.get('/:id', function (req, res) {
     let stackId = req.params.id
+    console.log(stackId)
     dbMethods.getStackById(stackId)
       .then(stack => {
         res.json(stack)
