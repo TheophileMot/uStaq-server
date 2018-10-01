@@ -19,11 +19,8 @@ module.exports = function (dbMethods) {
 
   router.post('/', function (req, res) {
     console.log("REQ.BODY:", req.body)
-    let proto = req.body.proto
+    let { type, title, query, text } = req.body.proto
     let userId = req.body.userId
-    let type = proto.type
-    let query = proto.query ? proto.query : null
-    let text = proto.text ? proto.text : null
       if (type === 'wiki') {
         api.passWikiToGoogle(query)
         .then(syntax => {
@@ -35,12 +32,19 @@ module.exports = function (dbMethods) {
             HoverTree.addHoverForestToData(sentence)
           })
           rankedSentences.sort((s, t) => t.score - s.score)
-          return rankedSentences
+          let goodScore = Math.ceil(rankedSentences[0].score / 2)
+          let filteredSentences = rankedSentences.filter(s => s.score > goodScore)
+          if (filteredSentences.length > 100) {
+            return filteredSentences.slice(0, 100)
+          }
+          return filteredSentences
         })
         .then(sentences => {
+          let goodSentences = sentences.forEach(sentence => sentence.push({front: '', back: ''}))
           let stack = {
+            title,
             owner: { _id: userId},
-            sentences
+            sentences: goodSentences
           }
           dbMethods.saveStack(stack, userId)
         })
@@ -58,12 +62,19 @@ module.exports = function (dbMethods) {
             HoverTree.addHoverForestToData(sentence)
           })
           rankedSentences.sort((s, t) => t.score - s.score)
-          return rankedSentences
+          let goodScore = Math.ceil(rankedSentences[0].score / 2)
+          let filteredSentences = rankedSentences.filter(s => s.score > goodScore)
+          if (filteredSentences.length > 100) {
+            return filteredSentences.slice(0, 100)
+          }
+          return filteredSentences
         })
-        .then(protoStack => {
+        .then(sentences => {
+          let goodSentences = sentences.forEach(sentence => sentence.push({front: '', back: ''}))
           let stack = {
+            title,
             owner: { _id: userId},
-            sentences: [protoStack]
+            sentences: goodSentences
           }
           dbMethods.saveStack(stack, userId)
         })

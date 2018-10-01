@@ -1,4 +1,5 @@
 'use strict'
+const { ObjectId } = require('mongodb')
 
 // defines helper methods for server interaction with db
 module.exports = function makeDbMethods(db) {
@@ -34,7 +35,8 @@ module.exports = function makeDbMethods(db) {
     },
     getStackById: async (stackId) => {
       try {
-        let stack = await db.collection('stacks').find({_id: stackId}).toArray()
+        let dbStackId = new ObjectId(stackId)
+        let stack = await db.collection('stacks').find({ _id: dbStackId }).toArray()
         return stack
       } catch (error) {
         return error
@@ -48,7 +50,7 @@ module.exports = function makeDbMethods(db) {
         return error
       }
     },
-    getAllStacks: async (userId) => {
+    getAllStacks: async () => {
       try {
         let stacks = await db.collection('stacks').find().toArray()
         return stacks
@@ -58,7 +60,8 @@ module.exports = function makeDbMethods(db) {
     },
     deleteStack: async (stackId) => {
       try {
-        await db.collection('stacks').deleteOne({_id: stackId})
+        let dbStackId = new ObjectId(stackId)
+        await db.collection('stacks').deleteOne({_id: dbStackId})
       } catch (error) {
         return error
       }
