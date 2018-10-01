@@ -66,5 +66,14 @@ module.exports = function makeDbMethods(db) {
         return error
       }
     },
+    editStack: async (stack, stackId) => {
+      try {
+        let dbStackId = new ObjectId(stackId)
+        await db.collection('stacks').deleteOne({_id: dbStackId})
+        await db.collection('stacks').insertOne(stack)
+      } catch (error) {
+        return error
+      }
+    },
   }
 }
