@@ -18,7 +18,7 @@ module.exports = function (dbMethods) {
   }
 
   router.post('/', function (req, res) {
-    console.log("REQ.BODY:", req.body)
+    // console.log("REQ.BODY:", req.body)
     let { type, title, query, text } = req.body.proto
     let userId = req.body.userId
       if (type === 'wiki') {
@@ -46,6 +46,7 @@ module.exports = function (dbMethods) {
             sentences
           }
           dbMethods.saveStack(stack, userId)
+          res.json(stack)
         })
         .catch(err => {
           res.status(500).send()
@@ -74,8 +75,11 @@ module.exports = function (dbMethods) {
             owner: { _id: userId},
             sentences
           }
+          // console.log("THIS IS STACK!!!!!!!!!!! ---------------->>>>", stack)
           dbMethods.saveStack(stack, userId)
+          res.json(stack)
         })
+  
         .catch(err => {
           res.status(500).send()
         })
