@@ -54,6 +54,15 @@ module.exports = function (dbMethods) {
       })
   })
 
+  router.post('edit/:id', function (req, res) {
+    let stackId = req.params.id
+    dbMethods.deleteStack(stackId)
+      .then(res.status(200).send("Deleted"))
+      .catch(err => {
+        res.status(500).send(err)
+      })
+  })
+
   router.post('delete/:id', function (req, res) {
     let stackId = req.params.id
     dbMethods.deleteStack(stackId)
