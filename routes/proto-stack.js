@@ -61,13 +61,13 @@ module.exports = function (dbMethods) {
             HoverTree.addHoverForestToData(sentence)
           })
           rankedSentences.sort((s, t) => t.score - s.score)
-          return rankedSentences.filter(s => s.score > 3)
+          return rankedSentences//.filter(s => s.score > 3)
         })
-        .then(protoStack => {
+        .then(sentences => {
           let stack = {
             title,
             owner: { _id: userId},
-            sentences: [protoStack]
+            sentences
           }
           dbMethods.saveStack(stack, userId)
         })
