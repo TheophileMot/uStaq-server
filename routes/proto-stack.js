@@ -40,10 +40,11 @@ module.exports = function (dbMethods) {
           return filteredSentences
         })
         .then(sentences => {
+          let goodSentences = sentences.forEach(sentence => sentence.push({front: '', back: ''}))
           let stack = {
             title,
             owner: { _id: userId},
-            sentences
+            sentences: goodSentences
           }
           dbMethods.saveStack(stack, userId)
         })
@@ -61,13 +62,19 @@ module.exports = function (dbMethods) {
             HoverTree.addHoverForestToData(sentence)
           })
           rankedSentences.sort((s, t) => t.score - s.score)
-          return rankedSentences.filter(s => s.score > 3)
+          let goodScore = Math.ceil(rankedSentences[0].score / 2)
+          let filteredSentences = rankedSentences.filter(s => s.score > goodScore)
+          if (filteredSentences.length > 100) {
+            return filteredSentences.slice(0, 100)
+          }
+          return filteredSentences
         })
-        .then(protoStack => {
+        .then(sentences => {
+          let goodSentences = sentences.forEach(sentence => sentence.push({front: '', back: ''}))
           let stack = {
             title,
             owner: { _id: userId},
-            sentences: [protoStack]
+            sentences: goodSentences
           }
           dbMethods.saveStack(stack, userId)
         })
