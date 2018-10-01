@@ -41,7 +41,7 @@ module.exports = function (dbMethods) {
 
   router.post('/', function (req, res) {
     let userId = req.body.userId
-    let newStack = { 
+    let newStack = {
       owner: { _id: userId},
       sentences: req.body.newStack
     }
