@@ -34,12 +34,16 @@ module.exports = function makeWikiHelper() {
           let result = JSON.parse(body)
           let pageId = Object.keys(result.query.pages)[0]
           let preParsed = result.query.pages[pageId].extract
-          let spacedText = preParsed.replace(/(<.+?>)/g, '$1 ')
-          let text = strip(JSON.stringify(spacedText))
-          let usableText = text.replace(regex1, ' ')
-            .replace(regex2, ' ').replace(regex3, "'s")
-            .replace(regex4, '"').replace(regex5, '"').replace(regex6, "'")
-          resolve(usableText)
+          if (preParsed) {
+            let spacedText = preParsed.replace(/(<.+?>)/g, '$1 ')
+            let text = strip(JSON.stringify(spacedText))
+            let usableText = text.replace(regex1, ' ')
+              .replace(regex2, ' ').replace(regex3, "'s")
+              .replace(regex4, '"').replace(regex5, '"').replace(regex6, "'")
+            resolve(usableText);
+          } else {
+            resolve('')
+          }
         })
       })
     }
