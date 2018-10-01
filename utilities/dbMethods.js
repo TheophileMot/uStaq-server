@@ -56,5 +56,12 @@ module.exports = function makeDbMethods(db) {
         return error
       }
     },
+    deleteStack: async (stackId) => {
+      try {
+        await db.collection('stacks').deleteOne({_id: stackId})
+      } catch (error) {
+        return error
+      }
+    },
   }
 }

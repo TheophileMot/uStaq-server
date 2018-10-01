@@ -41,7 +41,7 @@ module.exports = function (dbMethods) {
   router.post('/', function (req, res) {
     console.log("ASDF REQ.BODY.NEWSTACK:", req.body.newStack)
     let userId = req.body.userId
-    let newStack = { 
+    let newStack = {
       owner: { _id: userId},
       sentences: req.body.newStack
     }
@@ -54,6 +54,15 @@ module.exports = function (dbMethods) {
         res.status(500).send(err)
       })
   })
+
+    router.post('delete/:id', function (req, res) {
+      let stackId = req.params.id
+      dbMethods.deleteStack(stackId)
+        .then(res.status(200).send("Deleted"))
+        .catch(err => {
+          res.status(500).send(err)
+        })
+    })
 
   return router
 }
