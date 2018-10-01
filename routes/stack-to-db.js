@@ -41,7 +41,7 @@ module.exports = function (dbMethods) {
 
   router.post('/', function (req, res) {
     let userId = req.body.userId
-    let newStack = { 
+    let newStack = {
       owner: { _id: userId},
       sentences: req.body.newStack
     }
@@ -54,7 +54,7 @@ module.exports = function (dbMethods) {
       })
   })
 
-  router.post('edit/:id', function (req, res) {
+  router.post('/edit/:id', function (req, res) {
     let stackId = req.params.id
     dbMethods.deleteStack(stackId)
       .then(res.status(200).send("Deleted"))
@@ -63,7 +63,7 @@ module.exports = function (dbMethods) {
       })
   })
 
-  router.post('delete/:id', function (req, res) {
+  router.post('/delete/:id', function (req, res) {
     let stackId = req.params.id
     dbMethods.deleteStack(stackId)
       .then(res.status(200).send("Deleted"))

@@ -40,7 +40,6 @@ module.exports = function (dbMethods) {
           return filteredSentences
         })
         .then(sentences => {
-          // let goodSentences = sentences.forEach(sentence => sentence.push({front: '', back: ''}))
           let stack = {
             title,
             owner: { _id: userId},
@@ -71,7 +70,6 @@ module.exports = function (dbMethods) {
           return filteredSentences
         })
         .then(sentences => {
-          // let goodSentences = sentences.forEach(sentence => sentence.push({front: '', back: ''}))
           let stack = {
             title,
             owner: { _id: userId},
