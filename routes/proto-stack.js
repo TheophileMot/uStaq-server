@@ -18,7 +18,7 @@ module.exports = function (dbMethods) {
   }
 
   router.post('/', function (req, res) {
-    console.log("REQ.BODY:", req.body)
+    // console.log("REQ.BODY:", req.body)
     let { type, title, query, text } = req.body.proto
     let userId = req.body.userId
       if (type === 'wiki') {
@@ -40,13 +40,14 @@ module.exports = function (dbMethods) {
           return filteredSentences
         })
         .then(sentences => {
-          let goodSentences = sentences.forEach(sentence => sentence.push({front: '', back: ''}))
+          // let goodSentences = sentences.forEach(sentence => sentence.push({front: '', back: ''}))
           let stack = {
             title,
             owner: { _id: userId},
-            sentences: goodSentences
+            sentences
           }
           dbMethods.saveStack(stack, userId)
+          res.json(stack)
         })
         .catch(err => {
           res.status(500).send()
@@ -70,14 +71,17 @@ module.exports = function (dbMethods) {
           return filteredSentences
         })
         .then(sentences => {
-          let goodSentences = sentences.forEach(sentence => sentence.push({front: '', back: ''}))
+          // let goodSentences = sentences.forEach(sentence => sentence.push({front: '', back: ''}))
           let stack = {
             title,
             owner: { _id: userId},
-            sentences: goodSentences
+            sentences
           }
+          // console.log("THIS IS STACK!!!!!!!!!!! ---------------->>>>", stack)
           dbMethods.saveStack(stack, userId)
+          res.json(stack)
         })
+  
         .catch(err => {
           res.status(500).send()
         })
