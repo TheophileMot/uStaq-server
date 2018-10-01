@@ -60,7 +60,8 @@ module.exports = function makeDbMethods(db) {
     },
     deleteStack: async (stackId) => {
       try {
-        await db.collection('stacks').deleteOne({_id: stackId})
+        let dbStackId = new ObjectId(stackId)
+        await db.collection('stacks').deleteOne({_id: dbStackId})
       } catch (error) {
         return error
       } 
