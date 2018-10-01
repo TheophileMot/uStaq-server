@@ -17,7 +17,8 @@ module.exports = function (dbMethods) {
   })
 
   router.get('/:id', function (req, res) {
-    let stackId; // TODO - change to come from REQ
+    let stackId = req.params.id
+    console.log(stackId)
     dbMethods.getStackById(stackId)
       .then(stack => {
         res.json(stack)
@@ -39,17 +40,33 @@ module.exports = function (dbMethods) {
   })
 
   router.post('/', function (req, res) {
-    console.log("ASDF REQ.BODY.NEWSTACK:", req.body.newStack)
     let userId = req.body.userId
     let newStack = { 
       owner: { _id: userId},
       sentences: req.body.newStack
     }
-    console.log("NEWSTACK BEFORE SAVE", newStack)
     dbMethods.saveStack(newStack, userId)
       .then(stack => {
         res.status(201).send(stack)
       })
+      .catch(err => {
+        res.status(500).send(err)
+      })
+  })
+
+  router.post('edit/:id', function (req, res) {
+    let stackId = req.params.id
+    dbMethods.deleteStack(stackId)
+      .then(res.status(200).send("Deleted"))
+      .catch(err => {
+        res.status(500).send(err)
+      })
+  })
+
+  router.post('delete/:id', function (req, res) {
+    let stackId = req.params.id
+    dbMethods.deleteStack(stackId)
+      .then(res.status(200).send("Deleted"))
       .catch(err => {
         res.status(500).send(err)
       })

@@ -19,11 +19,8 @@ module.exports = function (dbMethods) {
 
   router.post('/', function (req, res) {
     console.log("REQ.BODY:", req.body)
-    let proto = req.body.proto
+    let { type, title, query, text } = req.body.proto
     let userId = req.body.userId
-    let type = proto.type
-    let query = proto.query ? proto.query : null
-    let text = proto.text ? proto.text : null
       if (type === 'wiki') {
         api.passWikiToGoogle(query)
         .then(syntax => {
@@ -39,6 +36,7 @@ module.exports = function (dbMethods) {
         })
         .then(sentences => {
           let stack = {
+            title,
             owner: { _id: userId},
             sentences
           }
@@ -62,6 +60,7 @@ module.exports = function (dbMethods) {
         })
         .then(protoStack => {
           let stack = {
+            title,
             owner: { _id: userId},
             sentences: [protoStack]
           }
