@@ -30,8 +30,14 @@ module.exports = function makeWikiHelper() {
             reject(error)
           }
 
-          //parsing, taking out html elements, extraneous characters with regex
-          let result = JSON.parse(body)
+          //parsing, taking out html elements, extraneous characters with regex)
+          let result;
+          try {
+            result = JSON.parse(body)
+          } catch (error) {
+            console.error(`Unusual JSON: ${body}`)
+            reject(error);
+          }
           let pageId = Object.keys(result.query.pages)[0]
           let preParsed = result.query.pages[pageId].extract
           if (preParsed) {

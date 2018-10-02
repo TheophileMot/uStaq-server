@@ -122,6 +122,8 @@ module.exports = function() {
     scoreSubTree: function(data, node) {
       // Look up score in chart, or use 1 if it's not there.
       let score = LABEL_SCORE_MULTIPLIERS[data.tokens[node].dependencyEdge.label] || 1;
+      // Favour long words.
+      score *= (1 + Math.log2(data.tokens[node].text.content.length));
       for (let child of data.tokens[node].hoverInfo.children) {
         score *= this.scoreSubTree(data, child);
       }

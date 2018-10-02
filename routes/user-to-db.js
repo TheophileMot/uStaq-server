@@ -19,11 +19,11 @@ module.exports = function(dbMethods) {
   })
 
   router.post('/auth', function(req, res) {
-    console.log("REQ SESSGION!!!!!!!!!!!", req.session)
+    // console.log("REQ SESSION!!!!!!!!!!!", req.session)
     OAuth.auth('github', req.session, {
       code: req.body.code
     }).then(function(oauthResult) {
-      console.log("THIS IS RESULT OAUTH", oauthResult)
+      // console.log("THIS IS RESULT OAUTH", oauthResult)
       return oauthResult.me()
       //oauthResult.access_token oauthResult.refresh_token
     }).then((data) => {
