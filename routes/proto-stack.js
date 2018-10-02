@@ -17,8 +17,17 @@ module.exports = function (dbMethods) {
     }
   }
 
+  function buildHideSubTree(sentence, index) {
+    if (!index) { return []; }
+
+    let result = [index];
+    for (let child of sentence.tokens[index].hoverInfo.children) {
+      result = result.concat(buildHideSubTree(child));
+    }
+    return result;
+  }
+
   router.post('/', function (req, res) {
-    // console.log("REQ.BODY:", req.body)
     let { type, title, query, text } = req.body.proto
     let userId = req.body.userId
       if (type === 'wiki') {
@@ -34,12 +43,16 @@ module.exports = function (dbMethods) {
           rankedSentences.sort((s, t) => t.score - s.score)
           let goodScore = Math.ceil(rankedSentences[0].score / 2)
           let filteredSentences = rankedSentences.filter(s => s.score > goodScore)
-          if (filteredSentences.length > 100) {
-            return filteredSentences.slice(0, 100)
-          }
-          return filteredSentences
+          return filteredSentences.slice(0, 100)
         })
         .then(sentences => {
+          sentences.forEach(sentence => {
+            sentence.indicesToHide = buildHideSubTree(sentence, sentence.chefsRecommendation)
+            sentence.front = sentence.tokens.map((token, index) => 
+              sentence.indicesToHide.includes(index) ? "----" : token.text.content
+            ).join(' ');      
+            sentence.back = sentence.text.content
+          })
           let stack = {
             title,
             owner: { _id: userId},
@@ -70,12 +83,18 @@ module.exports = function (dbMethods) {
           return filteredSentences
         })
         .then(sentences => {
+          sentences.forEach(sentence => {
+            sentence.indicesToHide = buildHideSubTree(sentence, sentence.chefsRecommendation)
+            sentence.front = sentence.tokens.map((token, index) => 
+              sentence.indicesToHide.includes(index) ? "----" : token.text.content
+            ).join(' ');      
+            sentence.back = sentence.text.content
+          })
           let stack = {
             title,
             owner: { _id: userId},
             sentences
           }
-          // console.log("THIS IS STACK!!!!!!!!!!! ---------------->>>>", stack)
           dbMethods.saveStack(stack, userId)
           res.json(stack)
         })

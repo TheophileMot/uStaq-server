@@ -22,6 +22,6 @@
     "oauthio-server": "^0.1.0",
     "request": "^2.88.0",
     "strip": "^3.0.0",
-    "weightedtextrank": "^1.2.0"
+    "weightedtextrank": "^1.2.1"
   }
 }

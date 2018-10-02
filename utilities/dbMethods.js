@@ -69,8 +69,10 @@ module.exports = function makeDbMethods(db) {
     editStack: async (stack, stackId) => {
       try {
         let dbStackId = new ObjectId(stackId)
+        console.log(`I'll try to make a stack with id ${stackId}: should be ${stack._id}`)
+        console.log(`The stack is ${JSON.stringify(stack)}`)
         await db.collection('stacks').deleteOne({_id: dbStackId})
-        await db.collection('stacks').insertOne(stack)
+        await db.collection('stacks').insertOne({...stack, _id: dbStackId })
       } catch (error) {
         return error
       }
