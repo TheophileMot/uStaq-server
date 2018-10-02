@@ -2,12 +2,27 @@
 'use strict';
 
 const PORT = 8080;
-const express = require('express')
-const bodyParser = require('body-parser')
-const app = express()
+const express = require('express');
+const bodyParser = require('body-parser');
+const app = express();
+const session = require('express-session');
+const cors = require('cors');
 
-app.use(bodyParser.json({limit: '50mb', extended: true}))
-app.use(express.static('public'))
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true
+}));
+
+app.use(bodyParser.json({limit: '50mb', extended: true}));
+app.use(express.static('public'));
+app.use(session({
+  secret: 'fhdifhdfhdshfds',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }
+}));
+
+
 
 // Mongo DB setup
 const MongoClient = require('mongodb').MongoClient
@@ -33,11 +48,11 @@ MongoClient.connect(MONGO_URI, function(err, client) {
   app.use('/proto', protoStackRouter)
 })
 
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
+// app.use(function(req, res, next) {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//   next();
+// });
 
 app.listen(PORT, () => {
   console.log('Example app listening on port ' + PORT)
