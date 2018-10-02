@@ -56,8 +56,8 @@ module.exports = function (dbMethods) {
 
   router.post('/edit/:id', function (req, res) {
     let stackId = req.params.id
-    dbMethods.getStackById(stackId)
-      .then(stack => dbMethods.editStack(stack, stackId))
+    let stack = req.body
+    dbMethods.editStack(stack, stackId)
       .then(res.status(200).send("Stack Edited"))
       .catch(err => {
         res.status(500).send(err)
