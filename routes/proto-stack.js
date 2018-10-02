@@ -9,20 +9,33 @@ const HoverTree = require('../utilities/buildHoverTree')()
 module.exports = function (dbMethods) {
 
   function tokenWeightFunction(i, sentence) {
-    const AVOID_WORDS = ['this', 'these', 'those']
-    if (AVOID_WORDS.includes(sentence.tokens[i].text.content.toLowerCase())) {
-      return 0.1;
-    } else {
-      return 1;
+    const AVOID_WORDS = ['it', 'its', 'they', 'their', 'this', 'these', 'those', 'other', 'another']
+    const INITIAL_LINK_WORDS = ['therefore', 'consequently', 'likewise', 'similarly', 'additionally', 'moreover', 'instead', 'otherwise', 'conversely', 'nonetheless', 'nevertheless', 'regardless']
+
+    let weight = 1;
+
+    // Penalize vague words, especially at beginning of sentence.
+    let word = sentence.tokens[i].text.content.toLowerCase();
+    if (AVOID_WORDS.includes(word)) {
+      weight *= 0.5;
+      if (i === 0) {
+        weight *= 0.1;
+      }
     }
+
+    if (INITIAL_LINK_WORDS.includes(word) && i === 0) {
+      weight *= 0.01;
+    }
+
+    return weight;
   }
 
   function buildHideSubTree(sentence, index) {
-    if (!index) { return []; }
+    if (index === undefined) { return []; }
 
     let result = [index];
     for (let child of sentence.tokens[index].hoverInfo.children) {
-      result = result.concat(buildHideSubTree(child));
+      result = result.concat(buildHideSubTree(sentence, child));
     }
     return result;
   }
@@ -41,16 +54,17 @@ module.exports = function (dbMethods) {
             HoverTree.addHoverForestToData(sentence)
           })
           rankedSentences.sort((s, t) => t.score - s.score)
-          let goodScore = Math.ceil(rankedSentences[0].score / 2)
-          let filteredSentences = rankedSentences.filter(s => s.score > goodScore)
-          return filteredSentences.slice(0, 100)
+          // let goodScore = 0; //Math.ceil(rankedSentences[0].score / 2)
+          // let filteredSentences = rankedSentences.filter(s => s.score > goodScore)
+          let filteredSentences = rankedSentences.filter(s => 20 < s.text.content.length && s.text.content.length < 200);
+          return filteredSentences.slice(0, Math.min(filteredSentences.length / 2, 100))
         })
         .then(sentences => {
           sentences.forEach(sentence => {
             sentence.indicesToHide = buildHideSubTree(sentence, sentence.chefsRecommendation)
             sentence.front = sentence.tokens.map((token, index) => 
-              sentence.indicesToHide.includes(index) ? "----" : token.text.content
-            ).join(' ');      
+              sentence.indicesToHide.includes(index) ? "────" : token.text.content
+            ).join(' ')
             sentence.back = sentence.text.content
           })
           let stack = {
@@ -75,18 +89,16 @@ module.exports = function (dbMethods) {
             HoverTree.addHoverForestToData(sentence)
           })
           rankedSentences.sort((s, t) => t.score - s.score)
-          let goodScore = Math.ceil(rankedSentences[0].score / 2)
-          let filteredSentences = rankedSentences.filter(s => s.score > goodScore)
-          if (filteredSentences.length > 100) {
-            return filteredSentences.slice(0, 100)
-          }
-          return filteredSentences
+          // let goodScore = 0; //Math.ceil(rankedSentences[0].score / 2)
+          // let filteredSentences = rankedSentences.filter(s => s.score > goodScore)
+          let filteredSentences = rankedSentences.filter(s => 20 < s.text.content.length && s.text.content.length < 200);
+          return filteredSentences.slice(0, Math.min(filteredSentences.length / 2, 100))
         })
         .then(sentences => {
           sentences.forEach(sentence => {
             sentence.indicesToHide = buildHideSubTree(sentence, sentence.chefsRecommendation)
             sentence.front = sentence.tokens.map((token, index) => 
-              sentence.indicesToHide.includes(index) ? "----" : token.text.content
+              sentence.indicesToHide.includes(index) ? "────" : token.text.content
             ).join(' ');      
             sentence.back = sentence.text.content
           })
