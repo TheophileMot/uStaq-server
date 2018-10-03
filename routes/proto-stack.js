@@ -56,13 +56,13 @@ module.exports = function (dbMethods) {
           rankedSentences.sort((s, t) => t.score - s.score)
           // let goodScore = 0; //Math.ceil(rankedSentences[0].score / 2)
           // let filteredSentences = rankedSentences.filter(s => s.score > goodScore)
-          let filteredSentences = rankedSentences.filter(s => 20 < s.text.content.length && s.text.content.length < 200);
+          let filteredSentences = rankedSentences.filter(s => 20 < s.text.content.length && s.text.content.length < 100);
           return filteredSentences.slice(0, Math.min(filteredSentences.length / 2, 100))
         })
         .then(sentences => {
           sentences.forEach(sentence => {
             sentence.indicesToHide = buildHideSubTree(sentence, sentence.chefsRecommendation)
-            sentence.front = sentence.tokens.map((token, index) => 
+            sentence.front = sentence.tokens.map((token, index) =>
               sentence.indicesToHide.includes(index) ? "────" : token.text.content
             ).join(' ')
             sentence.back = sentence.text.content
@@ -97,9 +97,9 @@ module.exports = function (dbMethods) {
         .then(sentences => {
           sentences.forEach(sentence => {
             sentence.indicesToHide = buildHideSubTree(sentence, sentence.chefsRecommendation)
-            sentence.front = sentence.tokens.map((token, index) => 
+            sentence.front = sentence.tokens.map((token, index) =>
               sentence.indicesToHide.includes(index) ? "────" : token.text.content
-            ).join(' ');      
+            ).join(' ');
             sentence.back = sentence.text.content
           })
           let stack = {
@@ -110,7 +110,7 @@ module.exports = function (dbMethods) {
           dbMethods.saveStack(stack, userId)
           res.json(stack)
         })
-  
+
         .catch(err => {
           res.status(500).send()
         })
