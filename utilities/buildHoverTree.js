@@ -8,8 +8,8 @@ module.exports = function() {
     ACOMP: 0.5,   // An adjectival phrase that functions as a complement (like an object of the verb). This relation specifically includes `be` copula constructions with adjective predicates. 
     AMOD: 1,      // An adjectival phrase that serves to modify the meaning of a noun phrase.
     APPOS: 3,     // A noun phrase immediately to the right of another noun phrase, with the second phrase serving to define or modify the first.
-    ATTR: 4,      // A nominal phrase headed by a copular verb. Note that ``ATTR`` is different from ``ACOMP`` in that the dependent is a noun phrase, not an adjective.
-    CONJ: 0.5,      // The relation between two elements connected by a coordinating conjunction, such as ``and`` or ``or``. The head of the relation is the first conjunct and other conjunctions depend on it via the ``conj`` relation.
+    ATTR: 8,      // A nominal phrase headed by a copular verb. Note that ``ATTR`` is different from ``ACOMP`` in that the dependent is a noun phrase, not an adjective.
+    CONJ: 0.5,    // The relation between two elements connected by a coordinating conjunction, such as ``and`` or ``or``. The head of the relation is the first conjunct and other conjunctions depend on it via the ``conj`` relation.
     DOBJ: 3,  	  // The noun phrase that is the accusative object of a verb.
     NN: 1,        // Any noun that serves to modify the head noun.
     // NPADVMOD: 1,  // A noun phrase used as an adverbial modifier.
@@ -122,8 +122,13 @@ module.exports = function() {
     scoreSubTree: function(data, node) {
       // Look up score in chart, or use 1 if it's not there.
       let score = LABEL_SCORE_MULTIPLIERS[data.tokens[node].dependencyEdge.label] || 1;
-      // Favour long words.
+      // Favour long words slightly
       score *= (1 + Math.log2(data.tokens[node].text.content.length));
+      // Penalize short words a lot.
+      if (data.tokens[node].text.content.length <= 5) {
+        score *= data.tokens[node].text.content.length**2 / 25;
+      }
+
       for (let child of data.tokens[node].hoverInfo.children) {
         score *= this.scoreSubTree(data, child);
       }
