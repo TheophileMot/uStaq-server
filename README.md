@@ -1,4 +1,6 @@
-1) import ga.json file to main project folder
-2) npm install
+
+
+1) sign up for Google NLP API credentials
+2) create ga.json file in root directory -- add credentials
 3) go nuts
 
