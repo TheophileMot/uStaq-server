@@ -1,5 +1,7 @@
 ## uStaq
 
+**uStaq** is an automatic cue card generator running on a MERN stack and WebSockets. The app uses the Google NLP API and a series of custom rank and filter algorithms to intelligently create fill-in-the-blank-style cue cards from a block of text. Users can review collections or play a multiplayer quiz game.
+
 This is half the uStaq project -- server side: https://github.com/TheophileMot/uStaq-server
 
 # Getting Started
@@ -17,3 +19,17 @@ This is half the uStaq project -- server side: https://github.com/TheophileMot/u
  - ustaq server `npm run local`
  - ustaq client `npm start`
  - socket-server (in client subfolder) `node server.js`
+
+# Screenshots
+
+Review a stack of cards:
+
+(photo)
+
+Edit the cards:
+
+(photo)
+
+Quiz mode:
+
+(photo)
