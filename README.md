@@ -1,6 +1,6 @@
 ## uStaq
 
-This is half the uStaq project -- server side: https://github.com/quhairfoir/uStaq-server
+This is half the uStaq project -- server side: https://github.com/TheophileMot/uStaq-server
 
 # Getting Started
 1) running this project requires authentication with Google's NLP API 
