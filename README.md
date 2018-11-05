@@ -24,12 +24,12 @@ This is half the uStaq project -- server side: https://github.com/TheophileMot/u
 
 Review a stack of cards:
 
-(photo)
+[!Reviewing a card in Bulgaria collection](https://github.com/TheophileMot/uStaq-server/blob/master/uStaq-review.png)
 
 Edit the cards:
 
-(photo)
+[!Editing a card in Bulgaria collection](https://github.com/TheophileMot/uStaq-server/blob/master/uStaq-edit.png)
 
 Quiz mode:
 
-(photo)
+[!Playing quiz in Bulgaria collection](https://github.com/TheophileMot/uStaq-server/blob/master/uStaq-quiz.png)
